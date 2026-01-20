@@ -1,0 +1,169 @@
+{
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Alterspective - Collaborate - Render Document (v1)",
+  "tags": [
+    "alterspective",
+    "collaborate",
+    "exports"
+  ],
+  "nodes": [
+    {
+      "id": "c68e2d3a-59e0-4caa-a4f3-8440b8dbe5cd",
+      "name": "Webhook - Render Document",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        460,
+        240
+      ],
+      "webhookId": "d12f874b-82fd-4baf-9505-62b040130d13",
+      "parameters": {
+        "path": "alterspective-collaborate-render-v1",
+        "options": {},
+        "httpMethod": "POST",
+        "responseMode": "responseNode",
+        "authentication": "headerAuth"
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "",
+          "name": "alterspective-collaborate-api-key"
+        }
+      },
+      "typeVersion": 2
+    },
+    {
+      "id": "be4d2d60-3e34-4b70-8a1a-41ea5a54aa9f",
+      "name": "Is Valid Request?",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        700,
+        240
+      ],
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ ['docx','pptx','html'].includes($json.body.format) && typeof $json.body.markdown === 'string' && $json.body.markdown.trim().length > 0 }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "typeVersion": 1
+    },
+    {
+      "id": "e5c7bf44-80ad-4a72-86d5-8e9e6e2c5c9b",
+      "name": "Render via pandoc-renderer",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        940,
+        160
+      ],
+      "parameters": {
+        "url": "http://pandoc-renderer:3030/",
+        "method": "POST",
+        "options": {},
+        "jsonBody": "={\n  \"text\": {{ JSON.stringify($json.body.markdown) }},\n  \"from\": \"markdown\",\n  \"to\": {{ JSON.stringify($json.body.format) }},\n  \"standalone\": {{ $json.body.format === 'html' }},\n  \"embed-resources\": {{ $json.body.format === 'html' }}\n}",
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        }
+      },
+      "typeVersion": 4.2
+    },
+    {
+      "id": "49e3ec57-d6f6-4c0c-9a6c-6b7b64dfe0b6",
+      "name": "Respond 200",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1160,
+        160
+      ],
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        },
+        "respondWith": "json",
+        "responseBody": "={{ $json }}"
+      },
+      "typeVersion": 1.1
+    },
+    {
+      "id": "3d0c1c1b-a2b7-4f0e-a9f0-e1b0deaaab5d",
+      "name": "Respond 400",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        940,
+        320
+      ],
+      "parameters": {
+        "options": {
+          "responseCode": 400
+        },
+        "respondWith": "json",
+        "responseBody": "={{ { error: 'Invalid request body. Expected: { format: docx|pptx|html, markdown: string, title?: string }' } }}"
+      },
+      "typeVersion": 1.1
+    }
+  ],
+  "connections": {
+    "Webhook - Render Document": {
+      "main": [
+        [
+          {
+            "node": "Is Valid Request?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Valid Request?": {
+      "main": [
+        [
+          {
+            "node": "Render via pandoc-renderer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond 400",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Render via pandoc-renderer": {
+      "main": [
+        [
+          {
+            "node": "Respond 200",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
