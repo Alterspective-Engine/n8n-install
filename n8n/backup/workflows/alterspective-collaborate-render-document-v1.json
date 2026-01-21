@@ -2,12 +2,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
+  "id": "c100a50b-d5ca-4912-998d-a398d6b6d426",
   "name": "Alterspective - Collaborate - Render Document (v1)",
-  "tags": [
-    "alterspective",
-    "collaborate",
-    "exports"
-  ],
   "nodes": [
     {
       "id": "c68e2d3a-59e0-4caa-a4f3-8440b8dbe5cd",
@@ -26,10 +22,7 @@
         "authentication": "headerAuth"
       },
       "credentials": {
-        "httpHeaderAuth": {
-          "id": "",
-          "name": "alterspective-collaborate-api-key"
-        }
+        "httpHeaderAuth": "alterspective-collaborate-api-key"
       },
       "typeVersion": 2
     },
