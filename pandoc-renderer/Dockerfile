@@ -8,4 +8,5 @@ COPY server.mjs ./server.mjs
 ENV PORT=3030
 EXPOSE 3030
 
-CMD ["node", "server.mjs"]
+# pandoc/core sets ENTRYPOINT to `pandoc`, so we must override it.
+ENTRYPOINT ["node", "server.mjs"]
