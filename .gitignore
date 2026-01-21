@@ -14,6 +14,14 @@ docker-compose.n8n-workers.yml
 welcome/data.json
 welcome/changelog.json
 
+# Deployment automation (contains credentials)
+scripts/automation/deployment-vultr-*.txt
+scripts/automation/deployment-*.txt
+scripts/automation/deploymentTest/config.ps1
+
+# Local temp artifacts
+*tempvultr-regions.json
+
 # Custom TLS certificates
 certs/*
 !certs/.gitkeep
