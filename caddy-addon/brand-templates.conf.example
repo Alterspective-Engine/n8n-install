@@ -1,0 +1,11 @@
+# Brand Templates API
+# Reverse proxy for Alterspective brand template generator
+#
+# Requires:
+#   - BRAND_TEMPLATES_HOSTNAME set in .env
+#   - brand-templates-api container on the localai_default network
+#   - Copy this file to brand-templates.conf to activate
+
+{$BRAND_TEMPLATES_HOSTNAME} {
+    reverse_proxy brand-templates-api:5000
+}

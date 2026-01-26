@@ -163,6 +163,11 @@ https://{$NEO4J_HOSTNAME}:7687 {
     try_files {path} /index.html
 }
 
+# Brand Templates API
+{$BRAND_TEMPLATES_HOSTNAME} {
+    reverse_proxy brand-templates-api:5000
+}
+
 import /etc/caddy/addons/*.conf
 
 # # SearXNG

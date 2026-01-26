@@ -322,6 +322,7 @@ services:
       - caddy-data:/data:rw
       - caddy-config:/config:rw
     environment:
+      BRAND_TEMPLATES_HOSTNAME: ${BRAND_TEMPLATES_HOSTNAME}
       COMFYUI_HOSTNAME: ${COMFYUI_HOSTNAME}
       COMFYUI_PASSWORD_HASH: ${COMFYUI_PASSWORD_HASH}
       COMFYUI_USERNAME: ${COMFYUI_USERNAME}
