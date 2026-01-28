@@ -6,7 +6,11 @@ neo4j/
 searxng/settings.yml
 searxng/uwsgi*
 shared/
-supabase/
+# Supabase data (but allow config files)
+supabase/volumes/db/data/
+!supabase/volumes/
+!supabase/volumes/api/
+!supabase/volumes/db/
 dify/
 volumes/
 docker-compose.override.yml
