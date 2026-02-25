@@ -321,6 +321,7 @@ services:
       - ./caddy-addon:/etc/caddy/addons:ro
       - ./certs:/etc/caddy/certs:ro
       - ./welcome:/srv/welcome:ro
+      - ./forge-dashboard-out:/srv/forge-dashboard:ro
       - caddy-data:/data:rw
       - caddy-config:/config:rw
     environment:
@@ -333,6 +334,7 @@ services:
       DOCLING_PASSWORD_HASH: ${DOCLING_PASSWORD_HASH}
       DOCLING_USERNAME: ${DOCLING_USERNAME}
       FLOWISE_HOSTNAME: ${FLOWISE_HOSTNAME}
+      FORGE_DASHBOARD_HOSTNAME: ${FORGE_DASHBOARD_HOSTNAME}
       GRAFANA_HOSTNAME: ${GRAFANA_HOSTNAME}
       LANGFUSE_HOSTNAME: ${LANGFUSE_HOSTNAME}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-internal}
