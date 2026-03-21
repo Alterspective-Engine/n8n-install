@@ -98,6 +98,40 @@ curl -H "apikey: YOUR_SERVICE_ROLE_KEY" \
   https://supabase.yourdomain.com/rest/v1/your_table
 ```
 
+### Optional External JWT Trust For PostgREST
+
+If you need the REST API to accept tokens from an external issuer, keep the
+existing `JWT_SECRET` for GoTrue and add a PostgREST-only verification override:
+
+```bash
+SUPABASE_PGRST_JWT_SECRET=<jwk-or-jwks-json>
+```
+
+This lets PostgREST validate asymmetric tokens such as Keystone RS256 access
+tokens without breaking existing HS256 Supabase tokens.
+
+Recommended pattern:
+
+1. Build a JWKS that contains:
+   - the current symmetric Supabase signing key as an `oct` JWK
+   - the external issuer's public RSA/EC JWK
+2. Store that JWKS JSON directly in `SUPABASE_PGRST_JWT_SECRET`
+3. Restart the `supabase-rest` container
+
+Helper script:
+
+```bash
+python scripts/generate_supabase_pgrst_jwks.py \
+  --hs256-secret "$JWT_SECRET" \
+  --public-jwk-file ./keystone-public.jwk.json
+```
+
+The script prints the JWKS JSON to stdout.
+
+This override only affects PostgREST verification. GoTrue login/session
+behavior remains controlled by `GOTRUE_JWT_SECRET` and the configured auth
+providers.
+
 ## Client Configuration
 
 ### JavaScript/TypeScript

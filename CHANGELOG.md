@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+- Optional PostgREST JWK/JWKS verification override via `SUPABASE_PGRST_JWT_SECRET` for self-hosted Supabase
+- `scripts/generate_supabase_pgrst_jwks.py` helper to build combined HS256/RS256 JWKS payloads for PostgREST
+
 ## [1.2.0] - 2026-01-12
 
 ### Added
